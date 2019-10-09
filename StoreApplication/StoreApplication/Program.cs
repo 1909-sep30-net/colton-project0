@@ -1,4 +1,5 @@
 ﻿using System;
+using BusinessLogic.Library;
 
 namespace StoreApplication
 {
@@ -6,7 +7,11 @@ namespace StoreApplication
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Customer colton = new Customer();
+            Address address = new Address();
+            string orderDateTime = "DateTime";
+            Order order = new Order(address, colton, orderDateTime);
+
         }
     }
 }

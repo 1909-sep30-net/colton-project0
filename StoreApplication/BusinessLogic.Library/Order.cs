@@ -6,35 +6,33 @@ namespace BusinessLogic.Library
 {
     public class Order
     {
-        //List<Product> ProductNames;
-        Product ProductName;
 
-        double Total;
         int Quantity;
         double Price;
-        public Order(Product productname, string location, )
+        string storelocation;
+        Customer customer;
+        DateTime time;
+
+        public Address StoreLocation { get; set; }
+        public Customer Customer { get; set; }
+
+        public string OrderDateTime { get; set; }
+
+        public List<Product> Products { get; set; }
+
+
+        public Order(Address storelocation, Customer customer, string orderDateTime)
         {
-
-        }
-         
-
-        public void CreateNewOrder(Product name)
-        {
-            ordernames.Add(name);
-            
-        }
-
-        public double Calculate()
-        {
-            return Quantity * Price;
-        }
-
-
-        public class ModifyOrder
-        {
+            this.StoreLocation = storelocation;
+            this.Customer = customer;
+            this.OrderDateTime = orderDateTime;
 
         }
 
+        public void IncludeProduct(Product product)
+        {
+            Products.Add(product);
+        }
     }
 }
 

@@ -9,12 +9,12 @@ namespace BusinessLogic.Library
         public string Name { get; set; }
         public double Price { get; set; }
 
-        public int Quantity { get; set; }
-        public Product(string name, double price, int quantity)
+        public int Code { get; set; }        
+        public Product(string name, double price, int code)
         {
             this.Name = name;
             this.Price = price;
-            this.Quantity = quantity;
+            this.Code = code;
 
         }
      
