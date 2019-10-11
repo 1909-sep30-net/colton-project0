@@ -6,8 +6,8 @@ namespace BusinessLogic.Library
 {
      public class  Product
     {
-        public string Name { get; set; }
-        public double Price { get; set; }
+        public string Name { get; }
+        public double Price { get;  }
 
         public int Code { get; set; }        
         public Product(string name, double price, int code)
@@ -15,7 +15,6 @@ namespace BusinessLogic.Library
             this.Name = name;
             this.Price = price;
             this.Code = code;
-
         }
      
     }
