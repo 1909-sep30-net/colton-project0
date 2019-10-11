@@ -7,12 +7,6 @@ namespace BusinessLogic.Library
     public class Order
     {
 
-        int Quantity;
-        double Price;
-        string storelocation;
-        Customer customer;
-        DateTime time;
-
         public Address StoreLocation { get; set; }
         public Customer Customer { get; set; }
 
