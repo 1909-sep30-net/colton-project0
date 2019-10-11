@@ -8,36 +8,36 @@ namespace BusinessLogic.Library
     /// </summary>
     public class Customer
     {
-        private string fname;
-        private string lname;
-        private int id;
+        private string _fname;
+        private string _lname;
+        public int Id { get; set; }
 
  
         public string Fname 
         { 
-            get => fname;
+            get => _fname;
             set 
             { 
-                fname = value; 
+                if(value.Length == 0)
+                {
+                    throw new ArgumentException("First Name must not be empty", nameof(value));
+                }
+                _fname = value; 
             } 
         }
         public string Lname 
         {
-            get => lname;
+            get => _lname;
             set
             {
-                lname = value;
+                if (value.Length == 0)
+                {
+                    throw new ArgumentException("Last Name must not be empty", nameof(value));
+                }
+                _lname = value;
             }
         }
 
-        public int Id 
-        {
-            get => id;
-            set
-            {
-                id = value; 
-            } 
-        }
         
         private void CheckFname(string f)
         {

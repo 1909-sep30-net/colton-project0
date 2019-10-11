@@ -6,7 +6,7 @@ namespace BusinessLogic.Library
 {
     public class Order
     {
-
+        public int Id { get; set; }
         public Address StoreLocation { get; set; }
         public Customer Customer { get; set; }
 
