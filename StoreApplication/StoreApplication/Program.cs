@@ -16,23 +16,27 @@ namespace StoreApplication
         static void Main(string[] args)
         {
             var dataSource = new List<Customer>();
+            var locations = new List<Address>();
 
             Console.WriteLine("Welcome!");
             while(true)
             {
                 Console.WriteLine();
                 Console.WriteLine();
-                Console.WriteLine("a:\t");
-                Console.WriteLine("b:\tPlace order to a store");
-                Console.WriteLine("c:\tAdd a new customer");
-                Console.WriteLine("b:\tSearch Customer");
-                Console.WriteLine("c:\tDisplay Order Details by Order Id");
-                Console.WriteLine("b:\tDisplay all Order History of a Store Location");
-                Console.WriteLine("c:\tDisplay all Order History of a Customer");
-                // Console.WriteLine("d:\tLoad data from disk.");
+                //Console.WriteLine("a:\t");
+                Console.WriteLine("b:\tStore Locator");
+                //Console.WriteLine("c:\tAdd a new customer");
+                //Console.WriteLine("b:\tSearch Customer");
+                //Console.WriteLine("c:\tDisplay Order Details by Order Id");
+                //Console.WriteLine("b:\tDisplay all Order History of a Store Location");
+                //Console.WriteLine("c:\tDisplay all Order History of a Customer");
                 Console.WriteLine();
                 Console.Write("Enter menu option, or \"q\" to quit: ");
                 var input = Console.ReadLine();
+                if ( input == "a")
+                {
+
+                }
             }
             
             Customer colton = new Customer();

@@ -23,6 +23,7 @@ namespace BusinessLogic.Library
 
         }
 
+        
         public void IncludeProduct(Product product)
         {
             Products.Add(product);
