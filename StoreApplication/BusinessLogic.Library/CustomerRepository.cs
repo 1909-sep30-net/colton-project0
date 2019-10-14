@@ -13,7 +13,7 @@ namespace BusinessLogic.Library
         {
             _customers = customers ?? throw new ArgumentNullException(nameof(customers));
         }
-        public IEnumerable<Customer> GetCustomers(string input = null)
+        public IEnumerable<Customer> GetCustomers(string input = null) //search with input
         {
             if (input == null)
             {
