@@ -39,10 +39,10 @@ namespace StoreApplication
                 }
             }
             
-            Customer colton = new Customer();
-            Address address = new Address();
-            string orderDateTime = "DateTime";
-            Order order = new Order(address, colton, orderDateTime);
+            //Customer colton = new Customer();
+            //Address address = new Address();
+            //string orderDateTime = "DateTime";
+            //Order order = new Order(address, colton, orderDateTime);
 
         }
     }
