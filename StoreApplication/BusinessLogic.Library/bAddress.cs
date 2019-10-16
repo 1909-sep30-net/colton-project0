@@ -6,50 +6,50 @@ namespace BusinessLogic.Library
 {
     public class Address
     {
-        private int id;
-        private string street;
-        private string city;
-        private int zipcode;
-        private string state;
+        private int _storeNo;
+        private string _street;
+        private string _city;
+        private int _zipcode;
+        private string _state;
 
-        public int Id
+        public int StoreNo
         {
-            get => id;
+            get => _storeNo;
             set
             {
-                id = value;
+                _storeNo = value;
             }
         }
         public string Street
         {
-            get => street;
+            get => _street;
             set
             {
-                street = value;
+                _street = value;
             }
         }
         public string City
         {
-            get => city;
+            get => _city;
             set
             {
-                city = value;
+                _city = value;
             }
         }
         public int Zipcode
         {
-            get => zipcode;
+            get => _zipcode;
             set
             {
-                zipcode = value;
+                _zipcode = value;
             }
         }
         public string State
         {
-            get => state;
+            get => _state;
             set
             {
-                state = value;
+                _state = value;
             }
         }
 

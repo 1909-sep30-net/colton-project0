@@ -8,7 +8,7 @@ namespace StoreApplication.Testing
  
     public class UnitTest1
     {
-        readonly Customer colton = new Customer();
+        readonly bCustomer colton = new bCustomer();
         [Fact]
         public void FName_NonEmptyValue_StoresCorrectly()
         {

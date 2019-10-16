@@ -36,7 +36,7 @@ namespace BusinessLogic.Library
         }
         public Address GetStoreById(int id)
         {
-            return _data.First(r => r.Id == id);
+            return _data.First(r => r.StoreNo == id);
         }
 
         public void DisplayOrderHistoryOfLocation(Address location)

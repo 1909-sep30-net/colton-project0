@@ -7,13 +7,13 @@ namespace BusinessLogic.Library
 {
     class CustomerRepository
     {
-        private readonly ICollection<Customer> _customers;
+        private readonly ICollection<bCustomer> _customers;
 
-        public CustomerRepository(ICollection<Customer> customers)
+        public CustomerRepository(ICollection<bCustomer> customers)
         {
             _customers = customers ?? throw new ArgumentNullException(nameof(customers));
         }
-        public IEnumerable<Customer> GetCustomers(string input = null) //search with input
+        public IEnumerable<bCustomer> GetCustomers(string input = null) //search with input
         {
             if (input == null)
             {
