@@ -13,26 +13,26 @@ namespace StoreApplication.Testing
         public void FName_NonEmptyValue_StoresCorrectly()
         {
             const string anyNameValue = "colton";
-            colton.Fname = anyNameValue;
-            Assert.Equal(anyNameValue, colton.Fname);
+            colton.FirstName = anyNameValue;
+            Assert.Equal(anyNameValue, colton.FirstName);
         }
         [Fact]
         public void LName_NonEmptyValue_StoresCorrectly()
         {
             const string anyNameValue = "clary";
-            colton.Lname = anyNameValue;
-            Assert.Equal(anyNameValue, colton.Lname);
+            colton.LastName = anyNameValue;
+            Assert.Equal(anyNameValue, colton.LastName);
 
         }
         [Fact]
         public void FName_EmptyValue_ThrowsArgumentException()
         {
-            Assert.ThrowsAny<ArgumentException>(() => colton.Fname = string.Empty);
+            Assert.ThrowsAny<ArgumentException>(() => colton.FirstName = string.Empty);
         }
         [Fact]
         public void LName_EmptyValue_ThrowsArgumentException()
         {
-            Assert.ThrowsAny<ArgumentException>(() => colton.Lname = string.Empty);
+            Assert.ThrowsAny<ArgumentException>(() => colton.LastName = string.Empty);
         }
         
        //public void Order_DoesNotMakeInventoryZero()

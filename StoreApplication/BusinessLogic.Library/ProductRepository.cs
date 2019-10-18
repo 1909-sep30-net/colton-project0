@@ -34,7 +34,7 @@ namespace BusinessLogic.Library
         }
         public Product GetProductById(int id)
         {
-            return _data.First(r => r.Code == id);
+            return _data.First(r => r.Id == id);
         }
 
     }

@@ -16,7 +16,7 @@ namespace StoreApplication
         public static DataAccess.StoreRepository CreateStoreRepository()
         {
             var optionsBuilder = new DbContextOptionsBuilder<Project0Context>();
-            optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
+             optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
 
             var dbContext = new Project0Context(optionsBuilder.Options);
 

@@ -9,7 +9,7 @@ using BusinessLogic.Library;
 
 namespace StoreApplication.DataAccess
 {
-    public class StoreRepository //: IStoreRepository, IDisposable
+    public class StoreRepository : IStoreRepository, IDisposable
     {
         /// <summary>
         /// A repository for data access for store objects and their Locations/Addresses.
@@ -24,17 +24,17 @@ namespace StoreApplication.DataAccess
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
-        public IEnumerable<BusinessLogic.Library.Location> GetLocationByAddress(string input = null)
-        {
-            IQueryable<DataAccess.Entities.Location> items = _dbContext.Location
-                .Include(r => r.Orders).AsNoTracking();
+        //public List<BusinessLogic.Library.Location> GetLocationByAddress(string input = null)
+        //{
+        //    List<DataAccess.Entities.Location> items = _dbContext.Location
+        //        .Include(r => r.Orders).AsNoTracking();
 
-            if (input != null)
-            {
-                items = items.Where(r => r.Address.Contains(input));
-            }
-            return items.Select(Mapper.MapLocation);
-        }
+        //    if (input != null)
+        //    {
+        //        items = items.Where(r => r.Address.Contains(input));
+        //    }
+        //    return items.Select(Mapper.MapLocation);
+        //}
         public BusinessLogic.Library.Location GetLocationById(int id) =>
             Mapper.MapLocation(_dbContext.Location.Find(id));
 
@@ -51,6 +51,21 @@ namespace StoreApplication.DataAccess
                 .Include(o => o.OrderDetails)
                 .ThenInclude(od => od.Product)
                 .Select(Mapper.MapOrders).ToList();
+        }
+
+        public List<BusinessLogic.Library.Customer> GetCustomerByName(string search = null)
+        {
+
+            return _dbContext.Customer
+
+                .Where(r => r.FirstName.Contains(search))
+                .Select(Mapper.MapCustomer).ToList();
+        }
+        public List<BusinessLogic.Library.Location> GetAllLocations()
+        {
+            return _dbContext.Location
+                .Select(Mapper.MapLocation).ToList();
+
         }
         public void AddOrder(Order order)
         {

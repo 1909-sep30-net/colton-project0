@@ -18,17 +18,19 @@ namespace BusinessLogic.Library.Interfaces
 
         //void AddLocation(Location location);
 
-        //List<Location> GetAllLocations();
+        public List<Location> GetAllLocations();
 
 
         Location GetLocationById(int Id);
-        Location GetLocationByAddress(string search = null);
+       // Location GetLocationByAddress(string search = null);
 
         void AddCustomer(Customer customer);
 
         //Customer GetCustomerById(int Id);
 
-        //List<Customer> GetCustomerByName(string name);
+        List<Customer> GetCustomerByName(string name);
+
+        void Save();
 
         //void Save();
     }
