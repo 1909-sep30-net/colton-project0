@@ -12,10 +12,7 @@ namespace StoreApplication.DataAccess.Entities
         }
 
         public int Id { get; set; }
-        public string Street { get; set; }
-        public string City { get; set; }
-        public string Zipcode { get; set; }
-        public string State { get; set; }
+        public string Address { get; set; }
 
         public virtual ICollection<Inventory> Inventory { get; set; }
         public virtual ICollection<Orders> Orders { get; set; }

@@ -7,21 +7,22 @@ namespace BusinessLogic.Library
     public class Order
     {
         public int Id { get; set; }
-        public Address StoreLocation { get; set; }
+        public Location Location { get; set; }
         public Customer Customer { get; set; }
 
-        public Dictionary<Product, double> ReceiptValue = new Dictionary<Product, double>();
+        
 
         public double Total { get; set; }
-        public string OrderDateTime { get; set; }
+        public DateTime OrderDateTime { get; set; }
 
-        public List<Product> Products { get; set; }
+        public List<OrderDetails> OrderDetails { get; set; }
 
         public Order()
         {
-
+            OrderDateTime = DateTime.Now;
         }
-        public Order(Address storelocation, Customer customer, string orderDateTime, List<Product> Quantities, List<double> prices)
+
+        /* public Order(Location storelocation, Customer customer, string orderDateTime, List<Product> Quantities, List<double> prices)
         {
             this.StoreLocation = storelocation;
             this.Customer = customer;
@@ -34,13 +35,13 @@ namespace BusinessLogic.Library
                 }
             }
 
-        }
+        } */
 
         
-        public void IncludeProduct(Product product)
+        /* public void IncludeProduct(Product product)
         {
             Products.Add(product);
-        }
+        } */
     }
 }
 

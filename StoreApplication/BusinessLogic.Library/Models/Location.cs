@@ -4,23 +4,21 @@ using System.Text;
 
 namespace BusinessLogic.Library
 {
-    public class Address
+    public class Location
     {
-        private int _storeNo;
-        private string _street;
+        
+        /* private string _street;
         private string _city;
         private int _zipcode;
-        private string _state;
+        private string _state;*/
+        public int Id { get; set; }
+        public string Address { get; set; }
 
-        public int StoreNo
-        {
-            get => _storeNo;
-            set
-            {
-                _storeNo = value;
-            }
-        }
-        public string Street
+        public List<InventoryItem> Inventory { get; set; } = new List<InventoryItem>();
+        public List<Order> OrderHistory { get; set; } = new List<Order>();
+
+
+        /*public string Street
         {
             get => _street;
             set
@@ -51,9 +49,9 @@ namespace BusinessLogic.Library
             {
                 _state = value;
             }
-        }
+        }*/
 
-        public List<Order> Orders { get; set; } = new List<Order>();
+       // public List<Order> Orders { get; set; } = new List<Order>();
     }
 }
         

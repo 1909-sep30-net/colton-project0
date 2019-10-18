@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+
+namespace BusinessLogic.Library.Interfaces
+{
+    public interface IStoreRepository : IDisposable
+    {
+        //IEnumerable<Location> GetStore(string search = null);
+
+        //Location GetStoreById(int id);
+
+        void AddOrder(Order order);
+        List<Order> GetOrderHistory(string search = null);
+
+        //Order GetOrderById(int Id);
+
+        //void AddLocation(Location location);
+
+        //List<Location> GetAllLocations();
+
+
+        Location GetLocationById(int Id);
+        Location GetLocationByAddress(string search = null);
+
+        void AddCustomer(Customer customer);
+
+        //Customer GetCustomerById(int Id);
+
+        //List<Customer> GetCustomerByName(string name);
+
+        //void Save();
+    }
+}

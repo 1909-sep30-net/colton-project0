@@ -6,16 +6,16 @@ namespace BusinessLogic.Library
 {
      public class  Product
     {
-        public string Name { get; }
-        public double Price { get;  }
+        public string Name { get; set; }
+        public double Price { get; set; }
 
-        public int Code { get; set; }        
-        public Product(string name, double price, int code)
+        public int Id { get; set; }        
+        /* public Product(string name, double price, int code)
         {
             this.Name = name;
             this.Price = price;
             this.Code = code;
-        }
+        }*/
      
     }
 }

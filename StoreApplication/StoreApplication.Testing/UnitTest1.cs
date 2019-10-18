@@ -5,10 +5,10 @@ using System;
 using BusinessLogic.Library;
 namespace StoreApplication.Testing
 {
- 
+
     public class UnitTest1
     {
-        readonly bCustomer colton = new bCustomer();
+        readonly Customer colton = new Customer();
         [Fact]
         public void FName_NonEmptyValue_StoresCorrectly()
         {
@@ -34,11 +34,13 @@ namespace StoreApplication.Testing
         {
             Assert.ThrowsAny<ArgumentException>(() => colton.Lname = string.Empty);
         }
-        //[Fact]
-        //public void Order_DoesNotMakeInventoryZero()
-        //{
-        //    Assert.False(Inventory == 0);
-        //}
+        
+       //public void Order_DoesNotMakeInventoryZero()
+       // {
+       //     Assert.False(Inventory == 0);
+       // }
+
+
        
     }
 }

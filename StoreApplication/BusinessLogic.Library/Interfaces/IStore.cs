@@ -4,8 +4,8 @@ using System.Text;
 
 namespace BusinessLogic.Library
 {
-    class SecretConfiguration
+    /*public interface IStore
     {
-
-    }
+        double Location { get; }
+    }*/
 }

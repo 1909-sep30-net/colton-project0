@@ -1,11 +1,13 @@
 ﻿using System;
+using BusinessLogic.Library.Interfaces;
 using BusinessLogic.Library;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security;
-using System.Xml.Serialization;
 using NLog;
+using StoreApplication.DataAccess;
+
 
 
 
@@ -14,42 +16,46 @@ namespace StoreApplication
     class Program
     {
         private static readonly ILogger s_logger = LogManager.GetCurrentClassLogger();
-        static void Main(string[] args)
+
+        public static void Main()
         {
+            //XmlSerializer serializer = Dependencies.CreateXmlSerializer();
 
-            var dataSource = new List<Address>();
-            var storeRepository = new StoreRepository(dataSource);
-            var dataSource2 = new List<Product>();
-            var productRepository = new ProductRepository(dataSource2);
-            XmlSerializer serializer = Dependencies.CreateXmlSerializer();
-            //var serializer = new XmlSerializer(typeof(List<Address>));
+            /*using IStoreRepository storeRepository = Dependencies.
+                CreateStoreRepository();
+            RunUi(storeRepository/*, serializer*///);
+        }
+        public static void RunUi(IStoreRepository storeRepository/*,
+            XmlSerializer serializer*/)
+        {
+            //string connectionString = SecretConfiguration.ConnectionString;
 
-            Console.WriteLine("Welcome!");
+
+            Console.WriteLine("Welcome to Azeroth!");
             while (true)
             {
                 Console.WriteLine();
-                Console.WriteLine("b:\tStore Locator"); //put your menus
+                Console.WriteLine("b:\tDisplay Locations");
                 Console.WriteLine();
                 Console.Write("Enter menu option, or \"q\" to quit: ");
                 var input = Console.ReadLine();
                 if (input == "b") //Open store locator
                 {
-                    Console.WriteLine("Enter City Name");
-                    var input2 = Console.ReadLine();
-
-                    var stores = storeRepository.GetStoresByCity(input2).ToList(); //search stores by City name
                     Console.WriteLine();
-                    if (stores.Count == 0) //if no restaurants
+
+
+                    var stores = storeRepository.GetLocationById(1).ToList(); //search stores by City name
+                    if (stores.Count == 0) //if no stores
                     {
                         Console.WriteLine("No Stores.");
                     }
-                    while (stores.Count > 0) //if there are restaurants, print them out
+                    while (stores.Count > 0) //if there are stores, print them out
                     {
                         for (int i = 1; i <= stores.Count; i++)
                         {
-                            Address address = stores[i - 1];
-                            //var store = stores[i - 1];
-                            var storeString = $"{i}: \"{address.Street}\" \"{address.City}\"";
+                            Location address = stores[i - 1];
+
+                            var storeString = "";//$"{i}: \"{address.Street}\" \"{address.City}\""; //prints out locations
                             Console.WriteLine(storeString);
 
                         }
@@ -64,7 +70,7 @@ namespace StoreApplication
                             while (true)
                             {
                                 Console.WriteLine();
-                                var restaurantString = $"\"{store.Street}\" \"{store.City}stores\"";
+                                var restaurantString = "";//$"\"{store.Street}\" \"{store.City}stores\"";
                                 Console.WriteLine(restaurantString);
                                 Console.WriteLine();
                                 if (orders.Count > 0) //if Store has Order History, give option to display order history
@@ -75,12 +81,12 @@ namespace StoreApplication
                                 Console.WriteLine();
                                 Console.Write("Enter valid menu option, or \"b\" to go back: ");
                                 input = Console.ReadLine();
-                                if (input == "r" && orders.Count > 0)
+                                if (input == "r" && orders.Count > 0) //if they want to display order history and orders exist for location
                                 {
                                     while (orders.Count > 0)
                                     {
                                         Console.WriteLine();
-                                        for (int i = 1; i <= orders.Count; i++)
+                                        for (int i = 1; i <= orders.Count; i++)//prints out order history for location of selection
                                         {
                                             Order order = orders[i - 1];
                                             Console.WriteLine($"{i}:"
@@ -93,67 +99,111 @@ namespace StoreApplication
                                             + " or \"b\" to go back: ");
 
                                         input = Console.ReadLine();
-                                        if (int.TryParse(input, out var reviewNum) && reviewNum > 0 && reviewNum <= orders.Count)
-
+                                        if (int.TryParse(input, out var reviewNum) && reviewNum > 0 && reviewNum <= orders.Count)//select order
                                         {
-                                            if (input == "b")
+                                            Location location = stores[reviewNum - 1];
+                                            List<Order> orders2 = location.Orders;
+                                            while (true)
                                             {
                                                 Console.WriteLine();
-                                                break;
-                                            }
-                                            else
-                                            {
+                                                var storeString = "";//$"\"{location.City}\"";
+                                                if (orders?.Count > 0)
+                                                {
+                                                    storeString += $", with score {location.Orders}"
+                                                        + $" from {orders2.Count} review";
+                                                    if (orders2.Count > 1)
+                                                    {
+                                                        storeString += "s";
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    storeString += ", with no orders";
+                                                }
+                                                Console.WriteLine(storeString);
                                                 Console.WriteLine();
-                                                Console.WriteLine($"Invalid input \"{input}\".");
-                                                s_logger.Warn($"Invalid input \"{input}\".");
+                                                if (input == "b")
+                                                {
+                                                    Console.WriteLine();
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    Console.WriteLine();
+                                                    Console.WriteLine($"Invalid input \"{input}\".");
+                                                    s_logger.Warn($"Invalid input \"{input}\".");
 
+                                                }
                                             }
-                                        }
-                                        else if (input == "b")
-                                        {
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine();
-                                            Console.WriteLine($"Invalid input \"{input}\".");
-                                            s_logger.Warn($"Invalid input \"{input}\".");
+
                                         }
                                     }
+
                                 }
                                 else if (input == "a") //start new order
                                 {
-                                    var newOrder = new Order();
-                                    var products = productRepository.GetProductByName(input2).ToList();
-                                    while (newOrder.ReceiptValue == null)
-                                    {
-                                        Console.WriteLine();
-                                        for (int i = 1; i <= orders.Count; i++)
-                                        {
-                                            Product order = products[i - 1];
-                                            Console.WriteLine($"{i}:"
-                                                + $" Order No: \"{order.Name}\""
-                                                + $" Date: {order.Price}"
-                                                + $" Total: \"{order.Code}\"");
-                                        }
-                                        Console.WriteLine();
-                                        Console.Write("Select Product and quantity: ");
-                                        Console.WriteLine("Enter valid menu option,"
-                                            + " or \"b\" to go back: ");
+                                    //var newOrder = new Order();
+                                    //var products = productRepository.GetProductByName().ToList();
+                                    //while (newOrder.ReceiptValue == null)
+                                    //{
+                                    //    Console.WriteLine();
+                                    //    for (int i = 1; i <= orders.Count; i++)
+                                    //    {
+                                    //        Product order = products[i - 1];
+                                    //        Console.WriteLine($"{i}:"
+                                    //            + $" Order No: \"{order.Name}\""
+                                    //            + $" Date: {order.Price}"
+                                    //            + $" Total: \"{order.Code}\"");
+                                    //    }
+                                    //    Console.WriteLine();
+                                    //    Console.Write("Select Product and quantity: ");
+                                    //    Console.WriteLine("Enter valid menu option,"
+                                    //        + " or \"b\" to go back: ");
 
-                                        input = Console.ReadLine();
-                                        if (int.TryParse(input, out var productNum) && productNum > 0 && productNum <= products.Count)
-                                        {
-                                            Console.WriteLine();
-                                            Console.WriteLine("Added to cart");
+                                    //    input = Console.ReadLine();
+                                    //    if (int.TryParse(input, out var productNum) && productNum > 0 && productNum <= products.Count)
+                                    //    {
+                                    //        Console.WriteLine();
+                                    //        Console.WriteLine("Added to cart");
 
-                                        }
+                                    //    }
 
-                                    }
+                                    //}
                                 }
+
+
+
                             }
-
-
                         }
+
+
+                        else if (input == "q")
+                        {
+                            s_logger.Info("Exiting application.");
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine($"Invalid input \"{input}\".");
+                            s_logger.Warn($"Invalid input \"{input}\".");
+                        }
+
                     }
-                } }
+                }
+                else if (input == "q")
+                {
+                    s_logger.Info("Exiting application.");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"Invalid input\"{input}\".");
+                    s_logger.Warn($"Invalid input \"{input}\".");
+                }
+
+            }
+        }
+    }
+}

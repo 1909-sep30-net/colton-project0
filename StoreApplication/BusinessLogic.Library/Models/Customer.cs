@@ -13,7 +13,7 @@ namespace BusinessLogic.Library
         public int Id { get; set; }
 
  
-        public string Fname 
+        public string FirstName 
         { 
             get => _fname;
             set 
@@ -25,7 +25,7 @@ namespace BusinessLogic.Library
                 _fname = value; 
             } 
         }
-        public string Lname 
+        public string LastName 
         {
             get => _lname;
             set
