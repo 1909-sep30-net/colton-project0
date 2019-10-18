@@ -16,13 +16,13 @@ namespace StoreApplication
     class Program
     {
         private static readonly ILogger s_logger = LogManager.GetCurrentClassLogger();
-        private static Order StartNewOrder(OrderDetails orderDetails, Customer customer, Location location)
+        private static void StartNewOrder(Customer customer, Location location)
         {
-            Order Order = new Order();
-            Order.Location = location;
-            Order.Customer = customer;
-            Order.OrderDetails.Add(orderDetails);
-            return Order;
+            using IStoreRepository storeRepository = Dependencies.CreateStoreRepository();
+
+
+
+
         }
         public static void Main()
         {
@@ -34,24 +34,6 @@ namespace StoreApplication
 
         public static void RunUi(IStoreRepository storeRepository)
         {
-            //string connectionString = SecretConfiguration.ConnectionString;
-
-            //var stores = storeRepository.GetAllLocations();
-            //Console.WriteLine("Do you even get here?");
-            //while (stores.Count > 0) //if there are stores, print them out
-            //{
-            //    for (int i = 1; i <= stores.Count; i++)
-            //    {
-            //        Console.WriteLine("stores was >0");
-            //        Location address = stores[i - 1];
-                  
-            //        var storeString = $"{i}: \"{address.Address}\""; //prints out locations
-            //        Console.WriteLine(storeString);
-
-            //    }
-                
-            //}
-
 
                 Console.WriteLine("Welcome to Azeroth!");
                 while (true)
@@ -157,9 +139,60 @@ namespace StoreApplication
                                         Console.WriteLine("Adding to DB...");
                                         storeRepository.AddCustomer(NewCustomer);
                                         storeRepository.Save();
+                                        
                                         OrderDetails orderDetails = new OrderDetails();
                                         Location location = store;
-                                        Order order = StartNewOrder(orderDetails, NewCustomer, location);
+                                        List<BusinessLogic.Library.Customer> colton = storeRepository.GetCustomer(NewCustomer.FirstName, NewCustomer.LastName);
+
+                                        Dictionary<BusinessLogic.Library.Product, int> invent101 = storeRepository.GetInventoryByStoreId(location.Id);
+                                        PrintInventory(invent101);
+                                        Console.WriteLine();
+                                        Console.WriteLine("Type the name of the item you'd like to purchase.");
+                                        string item1 = Console.ReadLine();
+                                        int Q = NewCustomer.Id;
+                                        foreach (Product p in invent101.Keys)
+                                        {
+                                            if (p.Name == item1)
+                                            {
+                                                Console.WriteLine("How many would you like to buy?");
+                                                string quantity = Console.ReadLine();
+                                                if (int.TryParse(quantity, out Q))
+                                                {
+                                                    Order order = new Order()
+                                                    {
+                                                        OrderDateTime = DateTime.Now,
+                                                        Total = p.Price,
+                                                        CustomerId = colton[0].Id,
+                                                        Location = location,
+                                                        OrderDetails = new List<OrderDetails>()
+
+                                                    };
+
+                                                    OrderDetails orderdetails = new OrderDetails()
+                                                    {
+
+                                                        Product = p,
+                                                        Quantity = 1
+
+                                                    };
+                                                    order.OrderDetails.Add(orderdetails);
+
+
+                                                    storeRepository.AddOrder(order);
+                                                    storeRepository.Save();
+
+                                                }
+
+                                            }
+
+                                        }
+
+
+
+                                        Console.WriteLine();
+
+
+                                        //StartNewOrder(NewCustomer, location);
 
                                     }
                                     else if (input == "r")
@@ -273,13 +306,15 @@ namespace StoreApplication
 
             }
         }
-        public Order StartNewOrder(OrderDetails orderDetails, Customer customer, Location location)
+        static void PrintInventory(Dictionary<BusinessLogic.Library.Product, int> invent101)
         {
-            Order Order = new Order();
-            Order.Location = location;
-            Order.Customer = customer;
-            Order.OrderDetails.Add(orderDetails);
-            return Order;
+            Console.WriteLine("This is what we have at that store! ");
+            foreach (var item in invent101)
+            {
+                Console.WriteLine($" Product: {item.Key.Name} Stock: {item.Value} Price: ${item.Key.Price}");
+
+            }
         }
+
     }
 }

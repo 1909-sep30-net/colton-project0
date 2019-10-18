@@ -38,11 +38,20 @@ namespace StoreApplication.DataAccess
         public BusinessLogic.Library.Location GetLocationById(int id) =>
             Mapper.MapLocation(_dbContext.Location.Find(id));
 
+
+
         public void AddCustomer(BusinessLogic.Library.Customer customer)
         {
             _dbContext.Customer.Add(Mapper.MapCustomer(customer));
         }
 
+        //public int GetCustomersIdByName(string FirstName, string LastName)
+        //{
+        //    return _dbContext.Customer
+        //        .Include(o=>o.Id)
+        //        .Where(r => r.FirstName.Contains(FirstName))
+        //        .Select(Mapper.MapCustomer);
+        //}
         public List<Order> GetOrderHistory(string search = null)
         {
            return _dbContext.Orders
@@ -69,7 +78,9 @@ namespace StoreApplication.DataAccess
         }
         public void AddOrder(Order order)
         {
+
             _dbContext.Orders.Add(Mapper.MapOrders(order));
+           // _dbContext.SaveChanges();
             //if (location.Id != 0)
             //{
             //    s_logger.Warn($"Order to be  added has an ID ({location.Id}) already: ignoring.");
@@ -77,22 +88,42 @@ namespace StoreApplication.DataAccess
 
             //s_logger.Info($"Adding order to store with ID {location.Id}");
 
-            //if (location != null)
-            //{
-            //    // get the db's version of that restaurant
-            //    // (can't use Find with Include)
-            //    Entities.Location LocationEntity = _dbContext.Location
-            //        .Include(r => r.Id).First(r => r.Id == location.Id);
-            //    Orders newEntity = Mapper.MapOrders(order);
-            //    LocationEntity.Orders.Add(newEntity);
-            //    // also, modify the parameters
-            //    location.OrderHistory.Add(order);
-            //}
-            //else
-            //{
-            //    Orders newEntity = Mapper.MapOrders(order);
-            //    _dbContext.Add(newEntity);
-            //}
+
+        }
+        public List<BusinessLogic.Library.Product> GetProducts()
+        {
+            return _dbContext.Product
+                .Select(Mapper.MapProduct).ToList();
+                
+        }
+        public List<BusinessLogic.Library.Customer> GetCustomer(string FirstName, string LastName)
+        {
+            return _dbContext.Customer
+                .Where(o => o.FirstName == FirstName && o.LastName == LastName)
+                .Select(Mapper.MapCustomer).ToList();
+        }
+        public Dictionary<BusinessLogic.Library.Product, int> GetInventoryByStoreId(int storeId)
+        {
+            using var context = GetContext();
+            List<Inventory> getInventory = context.Inventory.Where(i => i.LocationId == storeId).ToList();
+            Dictionary<BusinessLogic.Library.Product, int> keyValuePairs = new Dictionary<BusinessLogic.Library.Product, int>();
+            foreach (Inventory item in getInventory)
+            {
+                keyValuePairs.Add(new BusinessLogic.Library.Product() { Name = context.Product.Single(p => p.Id == item.ProductId).Name, Price = context.Product.Single(p => p.Id == item.ProductId).Price, Id = item.ProductId }, (int)item.Quantity);
+            }
+            return keyValuePairs;
+
+        }
+
+        public static Project0Context GetContext()
+        {
+            string connectionString = SecretConfiguration.ConnectionString;
+
+            DbContextOptions<Project0Context> options = new DbContextOptionsBuilder<Project0Context>()
+                .UseSqlServer(connectionString)
+                .Options;
+
+            return new Project0Context(options);
         }
 
         public void Save()

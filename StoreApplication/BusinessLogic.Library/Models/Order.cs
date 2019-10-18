@@ -10,10 +10,10 @@ namespace BusinessLogic.Library
         public Location Location { get; set; }
         public Customer Customer { get; set; }
 
-        
-
         public double Total { get; set; }
-        public DateTime OrderDateTime { get; set; }
+        public int? LocationId { get; set; }
+        public int? CustomerId { get; set; }
+        public DateTime? OrderDateTime { get; set; }
 
         public List<OrderDetails> OrderDetails { get; set; }
 

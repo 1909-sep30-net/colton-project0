@@ -13,7 +13,7 @@ namespace BusinessLogic.Library.Interfaces
 
         void AddOrder(Order order);
         List<Order> GetOrderHistory(string search = null);
-
+        Dictionary<BusinessLogic.Library.Product, int> GetInventoryByStoreId(int Id);
         //Order GetOrderById(int Id);
 
         //void AddLocation(Location location);
@@ -28,6 +28,7 @@ namespace BusinessLogic.Library.Interfaces
 
         //Customer GetCustomerById(int Id);
 
+        List<BusinessLogic.Library.Customer> GetCustomer(string FirstName, string LastName);
         List<Customer> GetCustomerByName(string name);
 
         void Save();

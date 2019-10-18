@@ -58,27 +58,24 @@ namespace StoreApplication.DataAccess
             {
                 Id = order.Id,
                 LocationId = order.Location.Id,
-                CustomerId = order.Customer.Id,
+                CustomerId = order.CustomerId, 
                 OrderDetails = order.OrderDetails.Select(Mapper.MapOrderDetails).ToList(),
                 OrderTime = order.OrderDateTime
-                
-                
+
+
 
             };
+
         }
         public static lib.Order MapOrders(Entities.Orders order)
         {
             return new lib.Order
             {
                 Id = order.Id,
-                Location = Mapper.MapLocation(order.Location),
-                Customer = Mapper.MapCustomer(order.Customer),
-                OrderDateTime = order.OrderTime,
-                OrderDetails = order.OrderDetails.Select(Mapper.MapOrderDetails).ToList()
-             
-
-
-
+                CustomerId = order.CustomerId ?? throw new ArgumentException("Argument cannot be null", nameof(order)),
+                LocationId = order.LocationId ?? throw new ArgumentException("Argument cannot be null", nameof(order)),
+                OrderDetails = order.OrderDetails.Select(MapOrderDetails).ToList(),
+                OrderDateTime = order.OrderTime ?? throw new ArgumentException("Argument cannot be null", nameof(order))
             };
         }
         public static lib.InventoryItem MapInventoryItem(Entities.Inventory inventoryItem)
@@ -139,7 +136,7 @@ namespace StoreApplication.DataAccess
             {
                 Id = product.Id,
                 Name = product.Name,
-                Price = (decimal)product.Price
+                Price = product.Price
 
             };
         }
