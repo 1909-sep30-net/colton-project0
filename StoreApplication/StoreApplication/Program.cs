@@ -68,7 +68,8 @@ namespace StoreApplication
                                 && storeNum > 0 && storeNum <= stores.Count) //check which one they select
                         {
                             var store = stores[storeNum - 1];
-                            var orders = store.OrderHistory;
+                            var orders = storeRepository.GetOrderHistory(storeNum);
+                           
 
                             while (true)
                             {
@@ -156,13 +157,21 @@ namespace StoreApplication
                                             {
                                                 Console.WriteLine("How many would you like to buy?");
                                                 string quantity = Console.ReadLine();
-                                                if (int.TryParse(quantity, out Q))
+                                                invent101.TryGetValue(p, out int value);
+                                                if (int.TryParse(quantity, out var D) && (D <= 0 || ((value - D) <= 0)))//checks if inventory will go below 0
+                                                {
+                                                    Console.WriteLine("You have to enter more than 0 and inventory can't go below 0");
+                                                    Console.WriteLine("How many would you like to buy?");
+                                                    quantity = Console.ReadLine();
+
+                                                }
+                                                if (int.TryParse(quantity, out D) && D > 1 && D <= value)
                                                 {
                                                     Order order = new Order()
                                                     {
                                                         OrderDateTime = DateTime.Now,
                                                         Total = p.Price,
-                                                        CustomerId = colton[0].Id,
+                                                        CustomerId = Q,
                                                         Location = location,
                                                         OrderDetails = new List<OrderDetails>()
 
@@ -172,7 +181,7 @@ namespace StoreApplication
                                                     {
 
                                                         Product = p,
-                                                        Quantity = 1
+                                                        Quantity = D
 
                                                     };
                                                     order.OrderDetails.Add(orderdetails);
@@ -181,7 +190,31 @@ namespace StoreApplication
                                                     storeRepository.AddOrder(order);
                                                     storeRepository.Save();
 
+                                                    InventoryItem inventoryItem = new InventoryItem();
+                                                    inventoryItem.Product = p;
+                                                    inventoryItem.Quantity = value - D;
+                                                    inventoryItem.Location = location;
+                                                    storeRepository.UpdateInventory(inventoryItem);
+                                                    storeRepository.Save();
+                                                    Console.WriteLine($"Thanks for Shopping! Press \"q\" to quit!");
+                                                    input = Console.ReadLine();
+
+                                                    if (input == "q")
+                                                    {
+                                                        s_logger.Info("Exiting application.");
+                                                        System.Environment.Exit(1);
+                                                        break;
+                                                    }
+
+                                                    else
+                                                    {
+                                                        Console.WriteLine();
+                                                        Console.WriteLine($"Invalid input\"{input}\".");
+                                                        s_logger.Warn($"Invalid input \"{input}\".");
+                                                    }
+
                                                 }
+
 
                                             }
 
@@ -192,7 +225,7 @@ namespace StoreApplication
                                         Console.WriteLine();
 
 
-                                        //StartNewOrder(NewCustomer, location);
+                                        
 
                                     }
                                     else if (input == "r")
@@ -202,6 +235,24 @@ namespace StoreApplication
                                         input = Console.ReadLine();
                                         //maybe put input validation
                                         var Customer = storeRepository.GetCustomerByName(input);
+                                        if(Customer.Count < 0)
+                                        {
+                                            Console.WriteLine($"You haven't been here before... Press\"b\" to go back...");
+                                            input = Console.ReadLine();
+                                            if (input == "b") 
+                                            {
+                                                break;
+                                            }
+                                            
+                                            
+                                            else
+                                            {
+                                                    Console.WriteLine();
+                                                    Console.WriteLine($"Invalid input\"{input}\".");
+                                                    s_logger.Warn($"Invalid input \"{input}\".");
+                                            }
+                                            
+                                        }
                                         while (Customer.Count > 0)
                                         {
                                             Console.WriteLine();
@@ -224,11 +275,84 @@ namespace StoreApplication
                                             {
                                                 var selectedCustomer = Customer[custNum - 1];
 
-                                                    Console.WriteLine("Begin Order, Enter Product");
-                    
-                                                    //Call BeginOrder method passing (customer, 
+                                                Console.WriteLine("Begin Order, Enter Product");
 
-                                               // }
+                                                OrderDetails orderDetails = new OrderDetails();
+                                                Location location = store;
+                                                List<BusinessLogic.Library.Customer> colton = storeRepository.GetCustomer(selectedCustomer.FirstName, selectedCustomer.LastName);
+
+                                                Dictionary<BusinessLogic.Library.Product, int> invent101 = storeRepository.GetInventoryByStoreId(location.Id);
+                                                PrintInventory(invent101);
+                                                Console.WriteLine();
+                                                Console.WriteLine("Type the name of the item you'd like to purchase.");
+                                                string item1 = Console.ReadLine();
+                                                int Q = selectedCustomer.Id;
+                                                foreach (Product p in invent101.Keys)
+                                                {
+                                                    if (p.Name == item1)
+                                                    {
+                                                        Console.WriteLine("How many would you like to buy?");
+                                                        string quantity = Console.ReadLine();
+                                                        invent101.TryGetValue(p, out int value);
+                                                        if (int.TryParse(quantity, out var D) && (D<=0 || ((value-D) <=0)))
+                                                        {
+                                                            Console.WriteLine("You have to enter more than 0 and inventory can't go below 0");
+                                                            Console.WriteLine("How many would you like to buy?");
+                                                            quantity = Console.ReadLine();
+                                                            
+                                                        }
+                                                        if (int.TryParse(quantity, out D) && D>1 && D<=value)
+                                                        {
+                                                            Order order = new Order()
+                                                            {
+                                                                OrderDateTime = DateTime.Now,
+                                                                Total = p.Price,
+                                                                CustomerId = Q,
+                                                                Location = location,
+                                                                OrderDetails = new List<OrderDetails>()
+
+                                                            };
+
+                                                            OrderDetails orderdetails = new OrderDetails()
+                                                            {
+
+                                                                Product = p,
+                                                                Quantity = D
+
+                                                            };
+                                                            order.OrderDetails.Add(orderdetails);
+
+
+                                                            storeRepository.AddOrder(order);
+                                                            storeRepository.Save();
+                                                            
+                                                            InventoryItem inventoryItem = new InventoryItem();
+                                                            inventoryItem.Product = p;
+                                                            inventoryItem.Quantity = value - D;
+                                                            inventoryItem.Location = location;
+                                                            storeRepository.UpdateInventory(inventoryItem);
+                                                            storeRepository.Save();
+                                                            Console.WriteLine($"Thanks for Shopping! Press \"q\" to quit!");
+                                                            input = Console.ReadLine();
+                                                            if(input == "q")
+                                                            {
+                                                                s_logger.Info("Exiting application.");
+                                                                System.Environment.Exit(1);
+                                                                break;
+                                                            }
+
+                                                            else
+                                                            {
+                                                                Console.WriteLine();
+                                                                Console.WriteLine($"Invalid input\"{input}\".");
+                                                                s_logger.Warn($"Invalid input \"{input}\".");
+                                                            }
+                                                        }
+
+                                                    }
+
+
+                                                }
                                             }
 
                                             else if (input == "b")
@@ -281,7 +405,9 @@ namespace StoreApplication
                         else if (input == "q") //quit application from
                         {
                             s_logger.Info("Exiting application.");
+                            System.Environment.Exit(1);
                             break;
+                         
                         }
                         else
                         {
@@ -295,6 +421,7 @@ namespace StoreApplication
                 else if (input == "q") //quit application from
                 {
                     s_logger.Info("Exiting application.");
+                    System.Environment.Exit(1);
                     break;
                 }
                 else
@@ -308,7 +435,7 @@ namespace StoreApplication
         }
         static void PrintInventory(Dictionary<BusinessLogic.Library.Product, int> invent101)
         {
-            Console.WriteLine("This is what we have at that store! ");
+            Console.WriteLine("This is what we have at our store! ");
             foreach (var item in invent101)
             {
                 Console.WriteLine($" Product: {item.Key.Name} Stock: {item.Value} Price: ${item.Key.Price}");

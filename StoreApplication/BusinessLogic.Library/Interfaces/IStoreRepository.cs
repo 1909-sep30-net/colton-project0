@@ -12,7 +12,7 @@ namespace BusinessLogic.Library.Interfaces
         //Location GetStoreById(int id);
 
         void AddOrder(Order order);
-        List<Order> GetOrderHistory(string search = null);
+        List<Order> GetOrderHistory(int search);
         Dictionary<BusinessLogic.Library.Product, int> GetInventoryByStoreId(int Id);
         //Order GetOrderById(int Id);
 
@@ -30,6 +30,7 @@ namespace BusinessLogic.Library.Interfaces
 
         List<BusinessLogic.Library.Customer> GetCustomer(string FirstName, string LastName);
         List<Customer> GetCustomerByName(string name);
+        void UpdateInventory(InventoryItem inventoryItem);
 
         void Save();
 

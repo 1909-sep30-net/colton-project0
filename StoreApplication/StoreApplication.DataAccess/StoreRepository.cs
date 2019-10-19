@@ -52,13 +52,14 @@ namespace StoreApplication.DataAccess
         //        .Where(r => r.FirstName.Contains(FirstName))
         //        .Select(Mapper.MapCustomer);
         //}
-        public List<Order> GetOrderHistory(string search = null)
+        public List<Order> GetOrderHistory(int search)
         {
            return _dbContext.Orders
                 .Include(o => o.Customer)
                 .Include(o => o.Location)
                 .Include(o => o.OrderDetails)
                 .ThenInclude(od => od.Product)
+                .Where(r => r.Location.Id.Equals(search))
                 .Select(Mapper.MapOrders).ToList();
         }
 
@@ -113,6 +114,11 @@ namespace StoreApplication.DataAccess
             }
             return keyValuePairs;
 
+        }
+        public void UpdateInventory(InventoryItem inventoryItem)
+        {
+
+            _dbContext.Inventory.Update(Mapper.MapInventoryItem(inventoryItem));
         }
 
         public static Project0Context GetContext()

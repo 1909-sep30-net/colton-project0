@@ -40,6 +40,7 @@ namespace StoreApplication.DataAccess
 
             };
         }
+
         public static Entities.Location MapLocation(lib.Location location)
         {
             return new Entities.Location
